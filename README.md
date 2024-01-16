@@ -18,6 +18,8 @@ You will need to configure your Seestar to connect to your WiFi network so your 
 
 Set up your Seestar S50 and put it in solar observing mode. Don't forget to install the included solar filter on the front. Once you get the sun centered in the field of view on the app, you can close the app and put down your phone.
 
+Note: On eclipse day, you may run the battery on your Seestar completely flat. Make sure you have a USB power source if you don't want the scope to cut off during the eclipse. Also check the "auto-shutoff" settings in the app.
+
 Run the script
 
 ```
