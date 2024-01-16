@@ -54,7 +54,7 @@ snapshots = [
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(description="Solar Eclipse Video Processing Script")
-parser.add_argument("--crop", action="store_true", help="Crop video from portrait to square")
+parser.add_argument("--crop", nargs='?', const=True, default=False, help="Crop video from portrait to square. e.g. --crop or --crop=1080:1080")
 parser.add_argument("--ip", default=camera_ip, help="Camera IP address")
 parser.add_argument("--skip_capture", action="store_true", help="Skip video capture")
 parser.add_argument("--skip_wait", action="store_true", help="Don't wait, start recording immediately")
@@ -147,8 +147,10 @@ def modify_video(input_file):
     output_file = f"cropped-{pid}.mp4"
     crop = None
     timestamp = None
-    if args.crop:
+    if args.crop == True:
         crop = 'crop=1080:1080'
+    elif args.crop:
+        crop = f'crop={args.crop}'
     if args.timestamp:
         timestamp = f'drawtext=expansion=strftime:basetime=$(date +%s -d\'{go_time}\')000000:text=\'%Y/%m/%d %H\\:%M\\:%S\':r=12:x=(w-tw)/2:y=h-(2*lh):fontcolor=white:fontsize=42'
     filter = ', '.join(s for s in [crop, timestamp] if s is not None)
