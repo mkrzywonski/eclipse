@@ -8,8 +8,6 @@ This script requires Python 3, ImageMagick, and FFmpeg. Make sure you have those
 
 Edit the script and set the times for first contact through fourth contact (C1, C2, C3, and C4) in the variables/constants section near the top.  A great resource for discovering the timing for the eclipse at your location is: [http://xjubier.free.fr/en/site_pages/solar_eclipses](http://xjubier.free.fr/en/site_pages/solar_eclipses/TSE_2024_GoogleMapFull.html)
 
-[/TSE_2024_GoogleMapFull.html](http://xjubier.free.fr/en/site_pages/solar_eclipses/TSE_2024_GoogleMapFull.html)
-
 If you want to generate an eclipse sequence with still images from different points during the eclipse, edit the times in the "snapshots" list. I got times for my location using the Solar Eclipse Timer app. <https://www.solareclipsetimer.com/>
 
 ## Usage:
