@@ -4,7 +4,7 @@ I created this python script to automate the capture of video on eclipse day (Ap
 
 ## Installation:
 
-This script requires Python 3, ImageMagick, and FFmpeg. Make sure you have those installed. I am running this script under Linux. I make no guarantees that it will run on you system.
+This script requires Python 3, ImageMagick, and FFmpeg. Make sure you have those installed. I am running this script under Linux. I make no guarantees that it will run on your system.
 
 Edit the script and set the times for first contact through fourth contact (C1, C2, C3, and C4) in the variables/constants section near the top.  A great resource for discovering the timing for the eclipse at your location is: [http://xjubier.free.fr/en/site_pages/solar_eclipses](http://xjubier.free.fr/en/site_pages/solar_eclipses/TSE_2024_GoogleMapFull.html)
 
@@ -71,7 +71,7 @@ The eclipse sequence montage will be named: "eclipse-xxxxxx.jpg"
 
 ## Non-Seestar Cameras
 
-You can use this script to capture video during the eclipse from any camera that provides a RTSP stream. I plan to capture video from a security camera overlooking my observing location as well as from the Seestar on eclipse day. I will overlay the solar image in one corner of the video showing all of us observing the eclipse.
+You can use this script to capture video during the eclipse from any camera that provides a RTSP stream. I plan to capture video from a security camera overlooking my observing location as well as from the Seestar on eclipse day. I will overlay the solar image in one corner on top of the video showing all of us observing the eclipse.
 
 Terminal Window #1:
 
