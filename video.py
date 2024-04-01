@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import re
+import pyaudio
 import argparse
 import datetime
 import time
@@ -115,6 +117,23 @@ def capture_video():
     seestar_url = f'rtsp://{args.ip}:4554/stream'
     length = margin + duration + margin
 
+    # Check for audio device
+    audio = ''
+    codec = 'copy'
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        device_info = p.get_device_info_by_index(i)
+        if "Jabra" in device_info['name']:
+            if "(hw:" in device_info['name']:
+                pattern = r'\(hw:(.*?)\)'
+                match = re.search(pattern, device_info['name'])
+                device = match.group(1)
+                print(f"Jabra device found at id:{device}. Recording audio.")
+                audio = f"-f alsa -ac 1 -i hw:{device}"
+                codec = "aac"
+                audio_file = 'audio.wav'
+                break
+
     # Use TCP for RTSP stream
     if args.tcp:
         tcp = '-rtsp_transport tcp'
@@ -130,13 +149,22 @@ def capture_video():
     if args.skip_capture:
         cmd = f'cp {args.src} {video_file}'
     else:
-        cmd = f'{ffmpeg} {tcp} -loglevel {loglevel} -stats -i {url} -t {length} -c:v copy -c:a copy {video_file}'
+        cmd = f'{ffmpeg} {tcp} -loglevel {loglevel} -stats -i {url} {audio} -t {length} -c:v copy -c:a {codec} {video_file}'
 
     print(f"{ConsoleColor.HEADER}Running command: {cmd}{ConsoleColor.ENDC}")
     result = os.system(cmd)
     if result > 0:
         print(f"{ConsoleColor.HEADER}Unable to capture. Is the Camera online?{ConsoleColor.ENDC}")
         exit()
+
+    # Generate .WAV file containg audio from 1 minute before totality to 1 minute after totality
+    if (audio != ''):
+        offset = margin + duration_pre - datetime.timedelta(minutes=1)
+        length = duration_totality + datetime.timedelta(minutes=2)
+        cmd = f'{ffmpeg} -loglevel {loglevel} -stats -ss {offset} -i {url} -t {length} -vn -acodec pcm_s16le -ar 44100 -ac 2 {audio_file}'
+        print(f"{ConsoleColor.HEADER}Running command: {cmd}{ConsoleColor.ENDC}")
+        result = os.system(cmd)
+
     return(video_file)
 
 def modify_video(input_file):
@@ -152,7 +180,9 @@ def modify_video(input_file):
     elif args.crop:
         crop = f'crop={args.crop}'
     if args.timestamp:
-        timestamp = f'drawtext=expansion=strftime:basetime=$(date +%s -d\'{go_time}\')000000:text=\'%Y/%m/%d %H\\:%M\\:%S\':r=12:x=(w-tw)/2:y=h-(2*lh):fontcolor=white:fontsize=42'
+        date_string = int(go_time.timestamp())
+        timestamp = f'drawtext=expansion=strftime:basetime={date_string}000000:text=\'%Y/%m/%d %H\\:%M\\:%S\':r=12:x=(w-tw)/2:y=h-(2*lh):fontcolor=white:fontsize=42'
+
     filter = ', '.join(s for s in [crop, timestamp] if s is not None)
     cmd = f'{ffmpeg} -loglevel {loglevel} -stats -i {input_file} -vf "{filter}" {output_file}'
     print(f"{ConsoleColor.HEADER}Running command: {cmd}{ConsoleColor.ENDC}")
